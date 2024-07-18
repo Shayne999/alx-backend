@@ -1,0 +1,1 @@
+This repository contains directories with various files. The contents of the files are solutions to various Alx Specialization phase tasks.
