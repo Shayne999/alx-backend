@@ -47,16 +47,15 @@ def get_locale() -> str:
     """Resort to the previous default behavior if the
     selected locale is not supported.
     """
-    locale = request.args.get("locale")
+    locale = request.args.get('locale', '')
     if locale in app.config["LANGUAGES"]:
         return locale
-
-    if g.user and g.user.get("locale") in app.config["LANGUAGES"]:
-        return g.user.get("locale")
-    
-    best_match = request.accept_languages.best_match(app.config["LANGUAGES"])
-
-    return best_match or app.config["BABEL_DEFAULT_LOCALE"]
+    if g.user and g.user['locale'] in app.config["LANGUAGES"]:
+        return g.user['locale']
+    header_locale = request.headers.get('locale', '')
+    if header_locale in app.config["LANGUAGES"]:
+        return header_locale
+    return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
 @app.route('/')
