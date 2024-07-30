@@ -51,13 +51,18 @@ def get_locale() -> str:
     if locale in app.config["LANGUAGES"]:
         return locale
 
-    return request.accept_languages.best_match(app.config["LANGUAGES"])
+    if g.user and g.user.get("locale") in app.config["LANGUAGES"]:
+        return g.user.get("locale")
+    
+    best_match = request.accept_languages.best_match(app.config["LANGUAGES"])
+
+    return best_match or app.config["BABEL_DEFAULT_LOCALE"]
 
 
 @app.route('/')
 def index() -> str:
     """Returns the index page"""
-    return render_template('5-index.html')
+    return render_template('6-index.html')
 
 
 if __name__ == "__main__":
