@@ -1,4 +1,4 @@
-import kue from 'kue';
+const kue = require("kue");
 
 function createPushNotificationsJobs(jobs, queue) {
 
@@ -8,12 +8,14 @@ function createPushNotificationsJobs(jobs, queue) {
     }
 
     jobs.forEach((jobData) => {
-        const job = queue.create('push_notification_code_3', jobData)
-            .save((err) => {
-                if (!err) {
-                    console.log(`Notification job created: ${job.id}`);
-                }
-            });
+        const job = queue.create('push_notification_code_3', jobData);
+
+        // Save the job to the queue and handle the 'save' callback separately
+        job.save((err) => {
+            if (!err) {
+                console.log(`Notification job created: ${job.id}`);
+            }
+        });
 
         //job progress
         job.on('progress', (progress) => {
@@ -32,4 +34,4 @@ function createPushNotificationsJobs(jobs, queue) {
 }
 
 
-export default createPushNotificationsJobs
+module.exports = { createPushNotificationsJobs };
